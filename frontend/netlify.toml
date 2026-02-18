@@ -1,3 +1,4 @@
+# Netlify config — if deploying frontend/ as root
 [build]
   command = "yarn build"
   publish = "build"

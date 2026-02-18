@@ -1,0 +1,10 @@
+# Netlify config — place at repo root if deploying from monorepo
+[build]
+  base = "frontend"
+  command = "yarn build"
+  publish = "frontend/build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
