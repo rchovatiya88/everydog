@@ -5,27 +5,27 @@
   },
   {
     "content": "Phase 1 & 2: Frontend - Homepage with Hero, About, Events preview, Training preview, Community, Footer",
-    "status": "in_progress"
+    "status": "completed"
   },
   {
     "content": "Phase 1 & 2: Frontend - Events page with filters + Event detail with registration",
-    "status": "in_progress"
+    "status": "completed"
   },
   {
     "content": "Phase 1 & 2: Frontend - Training page with guides and FAQ",
-    "status": "in_progress"
+    "status": "completed"
   },
   {
     "content": "Phase 1 & 2: Frontend - About page + Contact page",
-    "status": "in_progress"
+    "status": "completed"
   },
   {
     "content": "Phase 1 & 2: All user stories covered in Development",
-    "status": "pending"
+    "status": "completed"
   },
   {
     "content": "Phase 2: End to End Testing using Testing Agent",
-    "status": "pending"
+    "status": "in_progress"
   },
   {
     "content": "Phase 3: Bug fixes and hardening",
