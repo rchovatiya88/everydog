@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { EVENTS, GALLERY_IMAGES } from "@/data/events";
+import { submitToGoogleSheets } from "@/lib/googleSheets";
 import {
   Dog,
   CalendarDays,
@@ -56,12 +57,32 @@ function getSkillBadgeClass(level) {
 }
 
 export default function HomePage() {
+  const [email, setEmail] = useState("");
+  const [subscribing, setSubscribing] = useState(false);
   const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
   const previewEvents = useMemo(() => EVENTS.slice(0, 3), []);
 
-  const handleNewsletterSuccess = () => {
-    setNewsletterSubmitted(true);
-    toast.success("Welcome to the pack! You're now subscribed.");
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    if (!email || !email.includes("@")) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    setSubscribing(true);
+    try {
+      const result = await submitToGoogleSheets("newsletter", { email });
+      if (result.success) {
+        toast.success(result.message);
+        setNewsletterSubmitted(true);
+        setEmail("");
+      } else {
+        toast.error(result.message);
+      }
+    } catch (err) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setSubscribing(false);
+    }
   };
 
   return (
@@ -88,19 +109,12 @@ export default function HomePage() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link to="/events">
-                  <Button
-                    className="rounded-[12px] bg-[#0B74B5] text-white h-12 px-6 text-base hover:bg-[#095d91] shadow-sm hover:shadow-md"
-                    data-testid="hero-view-events-btn"
-                  >
+                  <Button className="rounded-[12px] bg-[#0B74B5] text-white h-12 px-6 text-base hover:bg-[#095d91] shadow-sm hover:shadow-md" data-testid="hero-view-events-btn">
                     View Events <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
                 <Link to="/training">
-                  <Button
-                    variant="outline"
-                    className="rounded-[12px] h-12 px-6 text-base border-border hover:bg-[#E7F4FD]/50"
-                    data-testid="hero-free-training-btn"
-                  >
+                  <Button variant="outline" className="rounded-[12px] h-12 px-6 text-base border-border hover:bg-[#E7F4FD]/50" data-testid="hero-free-training-btn">
                     Free Training
                   </Button>
                 </Link>
@@ -114,11 +128,7 @@ export default function HomePage() {
               className="relative"
             >
               <div className="rounded-[20px] overflow-hidden shadow-lg border border-border">
-                <img
-                  src="https://images.unsplash.com/photo-1763989979285-d86a24b5ff06?crop=entropy&cs=srgb&fm=jpg&w=800&q=80"
-                  alt="Dog catching disc mid-air"
-                  className="w-full h-[320px] sm:h-[400px] object-cover"
-                />
+                <img src="https://images.unsplash.com/photo-1763989979285-d86a24b5ff06?crop=entropy&cs=srgb&fm=jpg&w=800&q=80" alt="Dog catching disc mid-air" className="w-full h-[320px] sm:h-[400px] object-cover" />
               </div>
               <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-md border border-border p-3 flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-[#EAF7EF] flex items-center justify-center">
@@ -139,37 +149,14 @@ export default function HomePage() {
         <div className="container-main">
           <AnimatedSection>
             <motion.div variants={fadeUp} className="text-center mb-10">
-              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-3">
-                What We're About
-              </h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                A community built on fun, inclusivity, and the joy of watching dogs fly.
-              </p>
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-3">What We're About</h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">A community built on fun, inclusivity, and the joy of watching dogs fly.</p>
             </motion.div>
-
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
               {[
-                {
-                  icon: Dog,
-                  iconBg: "bg-[#E7F4FD]",
-                  iconColor: "text-[#0B74B5]",
-                  title: "All Breeds Welcome",
-                  desc: "Pitbulls, small dogs, rescues, seniors — everyone belongs here. No breed restrictions, ever.",
-                },
-                {
-                  icon: Sparkles,
-                  iconBg: "bg-[#EAF7EF]",
-                  iconColor: "text-[#1F7A4A]",
-                  title: "Free Beginner Training",
-                  desc: "We teach you how to safely train your dog to catch. No experience needed, just enthusiasm.",
-                },
-                {
-                  icon: Trophy,
-                  iconBg: "bg-[#FFE9D6]",
-                  iconColor: "text-[#CC6E22]",
-                  title: "Fun Challenges & Prizes",
-                  desc: "Friendly competitions with awards and giveaways. Every dog is a winner in our book.",
-                },
+                { icon: Dog, iconBg: "bg-[#E7F4FD]", iconColor: "text-[#0B74B5]", title: "All Breeds Welcome", desc: "Pitbulls, small dogs, rescues, seniors — everyone belongs here. No breed restrictions, ever." },
+                { icon: Sparkles, iconBg: "bg-[#EAF7EF]", iconColor: "text-[#1F7A4A]", title: "Free Beginner Training", desc: "We teach you how to safely train your dog to catch. No experience needed, just enthusiasm." },
+                { icon: Trophy, iconBg: "bg-[#FFE9D6]", iconColor: "text-[#CC6E22]", title: "Fun Challenges & Prizes", desc: "Friendly competitions with awards and giveaways. Every dog is a winner in our book." },
               ].map((item, i) => (
                 <motion.div key={i} variants={fadeUp}>
                   <Card className="rounded-[20px] border-border shadow-sm hover:shadow-md transition-shadow duration-200 h-full">
@@ -194,9 +181,7 @@ export default function HomePage() {
           <AnimatedSection>
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
               <div>
-                <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-2">
-                  Upcoming Events
-                </h2>
+                <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-2">Upcoming Events</h2>
                 <p className="text-muted-foreground">Join us at a Dallas park near you.</p>
               </div>
               <Link to="/events">
@@ -205,7 +190,6 @@ export default function HomePage() {
                 </Button>
               </Link>
             </motion.div>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
               {previewEvents.map((event, i) => (
                 <motion.div key={event.id} variants={fadeUp}>
@@ -214,34 +198,17 @@ export default function HomePage() {
                       <div className="relative">
                         <img src={event.image_url} alt={event.title} className="w-full h-48 object-cover" />
                         <div className="absolute top-3 left-3">
-                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getSkillBadgeClass(event.skill_level)}`}>
-                            {event.skill_level}
-                          </span>
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getSkillBadgeClass(event.skill_level)}`}>{event.skill_level}</span>
                         </div>
                       </div>
                       <CardContent className="p-5">
                         <h3 className="font-display text-base font-semibold mb-2 line-clamp-1">{event.title}</h3>
                         <div className="space-y-1.5 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-2">
-                            <CalendarDays className="w-3.5 h-3.5 flex-shrink-0" />
-                            <span>{new Date(event.date + "T00:00:00").toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                            <span className="line-clamp-1">{event.location}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Users className="w-3.5 h-3.5 flex-shrink-0" />
-                            <span className="font-display font-medium text-foreground">
-                              {event.capacity - event.registered_count} spots left
-                            </span>
-                          </div>
+                          <div className="flex items-center gap-2"><CalendarDays className="w-3.5 h-3.5 flex-shrink-0" /><span>{new Date(event.date + "T00:00:00").toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span></div>
+                          <div className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 flex-shrink-0" /><span className="line-clamp-1">{event.location}</span></div>
+                          <div className="flex items-center gap-2"><Users className="w-3.5 h-3.5 flex-shrink-0" /><span className="font-display font-medium text-foreground">{event.capacity - event.registered_count} spots left</span></div>
                         </div>
-                        <div className="mt-4">
-                          <span className="inline-flex items-center justify-center w-full rounded-[12px] bg-[#0B74B5] text-white h-10 text-sm font-medium">
-                            Register
-                          </span>
-                        </div>
+                        <div className="mt-4"><span className="inline-flex items-center justify-center w-full rounded-[12px] bg-[#0B74B5] text-white h-10 text-sm font-medium">Register</span></div>
                       </CardContent>
                     </Card>
                   </Link>
@@ -259,40 +226,20 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               <motion.div variants={fadeUp}>
                 <div className="rounded-[20px] overflow-hidden shadow-md border border-border">
-                  <img
-                    src="https://images.unsplash.com/photo-1763989979792-67611852276b?crop=entropy&cs=srgb&fm=jpg&w=700&q=80"
-                    alt="Dog training outdoors"
-                    className="w-full h-[280px] sm:h-[340px] object-cover"
-                  />
+                  <img src="https://images.unsplash.com/photo-1763989979792-67611852276b?crop=entropy&cs=srgb&fm=jpg&w=700&q=80" alt="Dog training outdoors" className="w-full h-[280px] sm:h-[340px] object-cover" />
                 </div>
               </motion.div>
               <motion.div variants={fadeUp}>
-                <Badge className="badge-beginner mb-4 text-xs px-3 py-1 rounded-full">
-                  <Sparkles className="w-3 h-3 mr-1" /> Free for everyone
-                </Badge>
-                <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-4">
-                  New to Disc? We'll Teach You.
-                </h2>
-                <p className="text-muted-foreground mb-6 leading-relaxed">
-                  Our free beginner training covers everything from safe throwing techniques to building your dog's confidence with the disc. No experience required — just bring your pup and a positive attitude.
-                </p>
+                <Badge className="badge-beginner mb-4 text-xs px-3 py-1 rounded-full"><Sparkles className="w-3 h-3 mr-1" /> Free for everyone</Badge>
+                <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-4">New to Disc? We'll Teach You.</h2>
+                <p className="text-muted-foreground mb-6 leading-relaxed">Our free beginner training covers everything from safe throwing techniques to building your dog's confidence with the disc. No experience required — just bring your pup and a positive attitude.</p>
                 <ul className="space-y-3 mb-6">
-                  {[
-                    "Beginner intro sessions every month",
-                    "Safety-first approach to training",
-                    "One-on-one guidance from experienced trainers",
-                    "All equipment provided",
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-[#1F7A4A] mt-0.5 flex-shrink-0" />
-                      <span>{item}</span>
-                    </li>
+                  {["Beginner intro sessions every month", "Safety-first approach to training", "One-on-one guidance from experienced trainers", "All equipment provided"].map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm"><CheckCircle2 className="w-4 h-4 text-[#1F7A4A] mt-0.5 flex-shrink-0" /><span>{item}</span></li>
                   ))}
                 </ul>
                 <Link to="/training">
-                  <Button className="rounded-[12px] bg-[#1F7A4A] text-white h-11 px-6 hover:bg-[#175d38] shadow-sm" data-testid="training-cta-btn">
-                    Learn More <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
+                  <Button className="rounded-[12px] bg-[#1F7A4A] text-white h-11 px-6 hover:bg-[#175d38] shadow-sm" data-testid="training-cta-btn">Learn More <ArrowRight className="w-4 h-4 ml-2" /></Button>
                 </Link>
               </motion.div>
             </div>
@@ -305,27 +252,13 @@ export default function HomePage() {
         <div className="container-main">
           <AnimatedSection>
             <motion.div variants={fadeUp} className="text-center mb-10">
-              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-3">
-                Community Highlights
-              </h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                See what the EveryDog community is all about.
-              </p>
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-3">Community Highlights</h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">See what the EveryDog community is all about.</p>
             </motion.div>
-
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
               {GALLERY_IMAGES.map((img, i) => (
-                <motion.div
-                  key={i}
-                  variants={fadeUp}
-                  className="gallery-item rounded-[18px] overflow-hidden border border-border shadow-sm"
-                >
-                  <img
-                    src={img.url}
-                    alt={img.alt}
-                    className="w-full h-40 sm:h-52 md:h-56 object-cover"
-                    loading="lazy"
-                  />
+                <motion.div key={i} variants={fadeUp} className="gallery-item rounded-[18px] overflow-hidden border border-border shadow-sm">
+                  <img src={img.url} alt={img.alt} className="w-full h-40 sm:h-52 md:h-56 object-cover" loading="lazy" />
                 </motion.div>
               ))}
             </div>
@@ -333,7 +266,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ============ NEWSLETTER (Netlify Form) ============ */}
+      {/* ============ NEWSLETTER ============ */}
       <section className="section-spacing bg-white" data-testid="newsletter-section">
         <div className="container-main">
           <AnimatedSection>
@@ -343,12 +276,8 @@ export default function HomePage() {
                   <div className="w-14 h-14 rounded-2xl bg-[#FFE9D6] flex items-center justify-center mx-auto mb-5">
                     <Send className="w-7 h-7 text-[#CC6E22]" />
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-3">
-                    Stay in the Loop
-                  </h2>
-                  <p className="text-muted-foreground max-w-md mx-auto mb-6">
-                    Get updates on events, training sessions, and community news. No spam, just good vibes and flying discs.
-                  </p>
+                  <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-3">Stay in the Loop</h2>
+                  <p className="text-muted-foreground max-w-md mx-auto mb-6">Get updates on events, training sessions, and community news. No spam, just good vibes and flying discs.</p>
                   {newsletterSubmitted ? (
                     <div className="flex flex-col items-center gap-2">
                       <div className="w-12 h-12 rounded-full bg-[#EAF7EF] flex items-center justify-center">
@@ -357,51 +286,27 @@ export default function HomePage() {
                       <p className="text-sm font-medium text-[#1F7A4A]" data-testid="newsletter-success-message">Welcome to the pack! You're subscribed.</p>
                     </div>
                   ) : (
-                    <form
-                      name="newsletter"
-                      method="POST"
-                      data-netlify="true"
-                      netlify-honeypot="bot-field"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        const formData = new FormData(e.target);
-                        fetch("/", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                          body: new URLSearchParams(formData).toString(),
-                        })
-                          .then(() => handleNewsletterSuccess())
-                          .catch(() => {
-                            // Still show success in static/preview mode
-                            handleNewsletterSuccess();
-                          });
-                      }}
-                      className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-                    >
-                      <input type="hidden" name="form-name" value="newsletter" />
-                      <p className="hidden">
-                        <label>Don't fill this out: <input name="bot-field" /></label>
-                      </p>
+                    <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
                       <Input
                         type="email"
-                        name="email"
                         placeholder="your@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         required
                         className="h-11 rounded-[12px] bg-white flex-1"
                         data-testid="newsletter-email-input"
                       />
                       <Button
                         type="submit"
+                        disabled={subscribing}
                         className="rounded-[12px] bg-[#FF8A2A] text-white h-11 px-6 hover:bg-[#e67a1f] shadow-sm whitespace-nowrap"
                         data-testid="newsletter-submit-button"
                       >
-                        Join the Pack
+                        {subscribing ? "Joining..." : "Join the Pack"}
                       </Button>
                     </form>
                   )}
-                  <p className="text-xs text-muted-foreground mt-3">
-                    We respect your inbox. Unsubscribe anytime.
-                  </p>
+                  <p className="text-xs text-muted-foreground mt-3">We respect your inbox. Unsubscribe anytime.</p>
                 </CardContent>
               </Card>
             </motion.div>
