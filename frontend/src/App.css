@@ -1,34 +1,106 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* EveryDog League Custom Styles */
+
+.font-display {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
+.font-body {
+    font-family: 'Figtree', system-ui, sans-serif;
+}
+
+/* Hero section background */
+.hero-bg {
+    background: linear-gradient(135deg, hsl(204, 50%, 98%) 0%, hsl(204, 60%, 95%) 100%);
+}
+
+/* Event card hover effect */
+.event-card-hover {
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.event-card-hover:hover {
+    box-shadow: 0 10px 24px rgba(16, 33, 43, 0.10);
+    transform: translateY(-2px);
+}
+
+/* Gallery image hover */
+.gallery-item img {
+    transition: transform 0.3s ease;
+}
+.gallery-item:hover img {
+    transform: scale(1.03);
+}
+
+/* Smooth page transitions */
+.page-enter {
+    opacity: 0;
+    transform: translateY(10px);
+}
+.page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Skill level badge colors */
+.badge-beginner {
+    background-color: #E7F4FD;
+    color: #10212B;
+    border: 1px solid #CDEBFA;
+}
+.badge-intermediate {
+    background-color: #EAF7EF;
+    color: #1A3B2A;
+    border: 1px solid #CFEBDD;
+}
+.badge-advanced {
+    background-color: rgba(255, 138, 42, 0.16);
+    color: #CC6E22;
+    border: 1px solid rgba(255, 138, 42, 0.25);
+}
+.badge-open {
+    background-color: #F3F0FF;
+    color: #4A3B8F;
+    border: 1px solid #DDD8F5;
+}
+
+/* Container */
+.container-main {
+    max-width: 72rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+    .container-main {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
     }
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-}
-
-.App-link {
-    color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
+@media (min-width: 1024px) {
+    .container-main {
+        padding-left: 2rem;
+        padding-right: 2rem;
     }
-    to {
-        transform: rotate(360deg);
+}
+
+/* Section spacing */
+.section-spacing {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+}
+
+@media (min-width: 640px) {
+    .section-spacing {
+        padding-top: 4.5rem;
+        padding-bottom: 4.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .section-spacing {
+        padding-top: 5.5rem;
+        padding-bottom: 5.5rem;
     }
 }

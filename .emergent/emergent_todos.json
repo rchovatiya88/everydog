@@ -1,23 +1,23 @@
 [
   {
     "content": "Phase 1 & 2: Backend API development (events, registration, newsletter, contact)",
-    "status": "pending"
+    "status": "completed"
   },
   {
     "content": "Phase 1 & 2: Frontend - Homepage with Hero, About, Events preview, Training preview, Community, Footer",
-    "status": "pending"
+    "status": "in_progress"
   },
   {
     "content": "Phase 1 & 2: Frontend - Events page with filters + Event detail with registration",
-    "status": "pending"
+    "status": "in_progress"
   },
   {
     "content": "Phase 1 & 2: Frontend - Training page with guides and FAQ",
-    "status": "pending"
+    "status": "in_progress"
   },
   {
     "content": "Phase 1 & 2: Frontend - About page + Contact page",
-    "status": "pending"
+    "status": "in_progress"
   },
   {
     "content": "Phase 1 & 2: All user stories covered in Development",
