@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import axios from "axios";
+import { getFilteredEvents } from "@/data/events";
 import { CalendarDays, MapPin, Users, ArrowRight, Search } from "lucide-react";
-
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 function getSkillBadgeClass(level) {
   switch (level) {
@@ -20,29 +18,13 @@ function getSkillBadgeClass(level) {
 }
 
 export default function EventsPage() {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [skillFilter, setSkillFilter] = useState("All");
   const [sortOrder, setSortOrder] = useState("soonest");
 
-  useEffect(() => {
-    fetchEvents();
-  }, [skillFilter, sortOrder]);
-
-  const fetchEvents = async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (skillFilter !== "All") params.append("skill_level", skillFilter);
-      params.append("sort", sortOrder);
-      const res = await axios.get(`${API}/events?${params.toString()}`);
-      setEvents(res.data.events);
-    } catch (err) {
-      console.error("Failed to fetch events", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const events = useMemo(
+    () => getFilteredEvents(skillFilter, sortOrder),
+    [skillFilter, sortOrder]
+  );
 
   return (
     <div className="section-spacing">
@@ -71,7 +53,7 @@ export default function EventsPage() {
         >
           <div className="flex-1">
             <label className="text-xs font-medium text-muted-foreground mb-1 block">Skill Level</label>
-            <Select value={skillFilter} onValueChange={setSkillFilter} data-testid="events-skill-filter-select">
+            <Select value={skillFilter} onValueChange={setSkillFilter}>
               <SelectTrigger className="h-11 rounded-[12px] bg-white" data-testid="events-skill-filter-select">
                 <SelectValue placeholder="All Levels" />
               </SelectTrigger>
@@ -86,7 +68,7 @@ export default function EventsPage() {
           </div>
           <div className="flex-1">
             <label className="text-xs font-medium text-muted-foreground mb-1 block">Sort By</label>
-            <Select value={sortOrder} onValueChange={setSortOrder} data-testid="events-sort-select">
+            <Select value={sortOrder} onValueChange={setSortOrder}>
               <SelectTrigger className="h-11 rounded-[12px] bg-white" data-testid="events-sort-select">
                 <SelectValue placeholder="Soonest" />
               </SelectTrigger>
@@ -99,20 +81,7 @@ export default function EventsPage() {
         </motion.div>
 
         {/* Events Grid */}
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <Card key={i} className="rounded-[20px] border-border overflow-hidden">
-                <div className="h-48 bg-muted animate-pulse" />
-                <CardContent className="p-5">
-                  <div className="h-4 bg-muted rounded animate-pulse mb-3 w-3/4" />
-                  <div className="h-3 bg-muted rounded animate-pulse mb-2 w-1/2" />
-                  <div className="h-3 bg-muted rounded animate-pulse w-2/3" />
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : events.length === 0 ? (
+        {events.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -153,20 +122,13 @@ export default function EventsPage() {
                           {event.skill_level}
                         </span>
                       </div>
-                      {event.registered_count >= event.capacity && (
-                        <div className="absolute top-3 right-3">
-                          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-200">
-                            Sold Out
-                          </span>
-                        </div>
-                      )}
                     </div>
                     <CardContent className="p-5">
                       <h3 className="font-display text-base font-semibold mb-3 line-clamp-1">{event.title}</h3>
                       <div className="space-y-2 text-sm text-muted-foreground">
                         <div className="flex items-center gap-2">
                           <CalendarDays className="w-3.5 h-3.5 flex-shrink-0" />
-                          <span>{new Date(event.date).toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                          <span>{new Date(event.date + "T00:00:00").toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' })}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
@@ -175,25 +137,15 @@ export default function EventsPage() {
                         <div className="flex items-center gap-2">
                           <Users className="w-3.5 h-3.5 flex-shrink-0" />
                           <span className="font-display font-medium text-foreground">
-                            {event.registered_count >= event.capacity
-                              ? "No spots remaining"
-                              : `${event.capacity - event.registered_count} of ${event.capacity} spots left`}
+                            {event.capacity - event.registered_count} of {event.capacity} spots left
                           </span>
                         </div>
                       </div>
-                      <Button
-                        className={`w-full mt-4 rounded-[12px] h-10 ${
-                          event.registered_count >= event.capacity
-                            ? "bg-muted text-muted-foreground cursor-not-allowed"
-                            : "bg-[#0B74B5] text-white hover:bg-[#095d91]"
-                        }`}
-                        disabled={event.registered_count >= event.capacity}
-                        data-testid={`event-card-register-button-${i}`}
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        {event.registered_count >= event.capacity ? "Sold Out" : "Register"}
-                        {event.registered_count < event.capacity && <ArrowRight className="w-4 h-4 ml-2" />}
-                      </Button>
+                      <div className="mt-4">
+                        <span className="inline-flex items-center justify-center w-full rounded-[12px] bg-[#0B74B5] text-white h-10 text-sm font-medium">
+                          Register <ArrowRight className="w-4 h-4 ml-2" />
+                        </span>
+                      </div>
                     </CardContent>
                   </Card>
                 </Link>

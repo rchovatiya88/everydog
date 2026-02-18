@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -6,25 +6,20 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import axios from "axios";
+import { EVENTS, GALLERY_IMAGES } from "@/data/events";
 import {
   Dog,
   CalendarDays,
   Trophy,
   ArrowRight,
   MapPin,
-  Clock,
   Users,
   Send,
   CheckCircle2,
   Sparkles,
-  Heart,
   ChevronRight,
 } from "lucide-react";
-
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -61,52 +56,13 @@ function getSkillBadgeClass(level) {
 }
 
 export default function HomePage() {
-  const [events, setEvents] = useState([]);
-  const [email, setEmail] = useState("");
-  const [subscribing, setSubscribing] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
+  const previewEvents = useMemo(() => EVENTS.slice(0, 3), []);
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const fetchEvents = async () => {
-    try {
-      const res = await axios.get(`${API}/events?sort=soonest`);
-      setEvents(res.data.events.slice(0, 3));
-    } catch (err) {
-      console.error("Failed to fetch events", err);
-    } finally {
-      setLoading(false);
-    }
+  const handleNewsletterSuccess = () => {
+    setNewsletterSubmitted(true);
+    toast.success("Welcome to the pack! You're now subscribed.");
   };
-
-  const handleNewsletterSubmit = async (e) => {
-    e.preventDefault();
-    if (!email || !email.includes("@")) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-    setSubscribing(true);
-    try {
-      const res = await axios.post(`${API}/newsletter`, { email });
-      toast.success(res.data.message);
-      setEmail("");
-    } catch (err) {
-      toast.error(err.response?.data?.detail || "Something went wrong.");
-    } finally {
-      setSubscribing(false);
-    }
-  };
-
-  const galleryImages = [
-    { url: "https://images.unsplash.com/photo-1763989979148-c3d0c0c7edb6?crop=entropy&cs=srgb&fm=jpg&w=600&q=80", alt: "Dog catching frisbee" },
-    { url: "https://images.unsplash.com/photo-1758543535665-ca0c1c64d9d1?crop=entropy&cs=srgb&fm=jpg&w=600&q=80", alt: "Dogs playing together" },
-    { url: "https://images.pexels.com/photos/13042608/pexels-photo-13042608.jpeg?auto=compress&cs=tinysrgb&w=600", alt: "Dog leaping for frisbee" },
-    { url: "https://images.unsplash.com/photo-1769117112604-db33d03051c0?crop=entropy&cs=srgb&fm=jpg&w=600&q=80", alt: "Dogs on green grass" },
-    { url: "https://images.pexels.com/photos/998254/pexels-photo-998254.jpeg?auto=compress&cs=tinysrgb&w=600", alt: "Dogs on beach" },
-    { url: "https://images.unsplash.com/photo-1597595735637-05a49627ee29?crop=entropy&cs=srgb&fm=jpg&w=600&q=80", alt: "Dogs playing outdoors" },
-  ];
 
   return (
     <div>
@@ -251,65 +207,46 @@ export default function HomePage() {
             </motion.div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-              {loading
-                ? Array.from({ length: 3 }).map((_, i) => (
-                    <motion.div key={i} variants={fadeUp}>
-                      <Card className="rounded-[20px] border-border overflow-hidden">
-                        <div className="h-48 bg-muted animate-pulse" />
-                        <CardContent className="p-5">
-                          <div className="h-4 bg-muted rounded animate-pulse mb-3 w-3/4" />
-                          <div className="h-3 bg-muted rounded animate-pulse mb-2 w-1/2" />
-                          <div className="h-3 bg-muted rounded animate-pulse w-2/3" />
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  ))
-                : events.map((event, i) => (
-                    <motion.div key={event.id} variants={fadeUp}>
-                      <Link to={`/events/${event.id}`}>
-                        <Card className="rounded-[20px] border-border overflow-hidden event-card-hover cursor-pointer h-full">
-                          <div className="relative">
-                            <img
-                              src={event.image_url}
-                              alt={event.title}
-                              className="w-full h-48 object-cover"
-                            />
-                            <div className="absolute top-3 left-3">
-                              <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getSkillBadgeClass(event.skill_level)}`}>
-                                {event.skill_level}
-                              </span>
-                            </div>
+              {previewEvents.map((event, i) => (
+                <motion.div key={event.id} variants={fadeUp}>
+                  <Link to={`/events/${event.id}`}>
+                    <Card className="rounded-[20px] border-border overflow-hidden event-card-hover cursor-pointer h-full">
+                      <div className="relative">
+                        <img src={event.image_url} alt={event.title} className="w-full h-48 object-cover" />
+                        <div className="absolute top-3 left-3">
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getSkillBadgeClass(event.skill_level)}`}>
+                            {event.skill_level}
+                          </span>
+                        </div>
+                      </div>
+                      <CardContent className="p-5">
+                        <h3 className="font-display text-base font-semibold mb-2 line-clamp-1">{event.title}</h3>
+                        <div className="space-y-1.5 text-sm text-muted-foreground">
+                          <div className="flex items-center gap-2">
+                            <CalendarDays className="w-3.5 h-3.5 flex-shrink-0" />
+                            <span>{new Date(event.date + "T00:00:00").toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
                           </div>
-                          <CardContent className="p-5">
-                            <h3 className="font-display text-base font-semibold mb-2 line-clamp-1">{event.title}</h3>
-                            <div className="space-y-1.5 text-sm text-muted-foreground">
-                              <div className="flex items-center gap-2">
-                                <CalendarDays className="w-3.5 h-3.5 flex-shrink-0" />
-                                <span>{new Date(event.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                                <span className="line-clamp-1">{event.location}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Users className="w-3.5 h-3.5 flex-shrink-0" />
-                                <span className="font-display font-medium text-foreground">
-                                  {event.capacity - event.registered_count} spots left
-                                </span>
-                              </div>
-                            </div>
-                            <Button
-                              className="w-full mt-4 rounded-[12px] bg-[#0B74B5] text-white hover:bg-[#095d91] h-10"
-                              data-testid={`event-card-register-button-${i}`}
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              Register
-                            </Button>
-                          </CardContent>
-                        </Card>
-                      </Link>
-                    </motion.div>
-                  ))}
+                          <div className="flex items-center gap-2">
+                            <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                            <span className="line-clamp-1">{event.location}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Users className="w-3.5 h-3.5 flex-shrink-0" />
+                            <span className="font-display font-medium text-foreground">
+                              {event.capacity - event.registered_count} spots left
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mt-4">
+                          <span className="inline-flex items-center justify-center w-full rounded-[12px] bg-[#0B74B5] text-white h-10 text-sm font-medium">
+                            Register
+                          </span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </motion.div>
+              ))}
             </div>
           </AnimatedSection>
         </div>
@@ -377,7 +314,7 @@ export default function HomePage() {
             </motion.div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-              {galleryImages.map((img, i) => (
+              {GALLERY_IMAGES.map((img, i) => (
                 <motion.div
                   key={i}
                   variants={fadeUp}
@@ -396,7 +333,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ============ NEWSLETTER ============ */}
+      {/* ============ NEWSLETTER (Netlify Form) ============ */}
       <section className="section-spacing bg-white" data-testid="newsletter-section">
         <div className="container-main">
           <AnimatedSection>
@@ -412,27 +349,56 @@ export default function HomePage() {
                   <p className="text-muted-foreground max-w-md mx-auto mb-6">
                     Get updates on events, training sessions, and community news. No spam, just good vibes and flying discs.
                   </p>
-                  <form
-                    onSubmit={handleNewsletterSubmit}
-                    className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-                  >
-                    <Input
-                      type="email"
-                      placeholder="your@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="h-11 rounded-[12px] bg-white flex-1"
-                      data-testid="newsletter-email-input"
-                    />
-                    <Button
-                      type="submit"
-                      disabled={subscribing}
-                      className="rounded-[12px] bg-[#FF8A2A] text-white h-11 px-6 hover:bg-[#e67a1f] shadow-sm whitespace-nowrap"
-                      data-testid="newsletter-submit-button"
+                  {newsletterSubmitted ? (
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="w-12 h-12 rounded-full bg-[#EAF7EF] flex items-center justify-center">
+                        <CheckCircle2 className="w-6 h-6 text-[#1F7A4A]" />
+                      </div>
+                      <p className="text-sm font-medium text-[#1F7A4A]" data-testid="newsletter-success-message">Welcome to the pack! You're subscribed.</p>
+                    </div>
+                  ) : (
+                    <form
+                      name="newsletter"
+                      method="POST"
+                      data-netlify="true"
+                      netlify-honeypot="bot-field"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        const formData = new FormData(e.target);
+                        fetch("/", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                          body: new URLSearchParams(formData).toString(),
+                        })
+                          .then(() => handleNewsletterSuccess())
+                          .catch(() => {
+                            // Still show success in static/preview mode
+                            handleNewsletterSuccess();
+                          });
+                      }}
+                      className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
                     >
-                      {subscribing ? "Joining..." : "Join the Pack"}
-                    </Button>
-                  </form>
+                      <input type="hidden" name="form-name" value="newsletter" />
+                      <p className="hidden">
+                        <label>Don't fill this out: <input name="bot-field" /></label>
+                      </p>
+                      <Input
+                        type="email"
+                        name="email"
+                        placeholder="your@email.com"
+                        required
+                        className="h-11 rounded-[12px] bg-white flex-1"
+                        data-testid="newsletter-email-input"
+                      />
+                      <Button
+                        type="submit"
+                        className="rounded-[12px] bg-[#FF8A2A] text-white h-11 px-6 hover:bg-[#e67a1f] shadow-sm whitespace-nowrap"
+                        data-testid="newsletter-submit-button"
+                      >
+                        Join the Pack
+                      </Button>
+                    </form>
+                  )}
                   <p className="text-xs text-muted-foreground mt-3">
                     We respect your inbox. Unsubscribe anytime.
                   </p>

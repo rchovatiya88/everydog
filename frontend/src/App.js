@@ -1,5 +1,5 @@
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
@@ -9,10 +9,20 @@ import EventDetailPage from "@/pages/EventDetailPage";
 import TrainingPage from "@/pages/TrainingPage";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
+import { useEffect } from "react";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className="min-h-screen flex flex-col bg-background">
         <SiteHeader />
         <main className="flex-1">
