@@ -25,10 +25,30 @@
   },
   {
     "content": "Phase 2: End to End Testing using Testing Agent",
+    "status": "completed"
+  },
+  {
+    "content": "Convert to static frontend-only: Remove all API calls, hardcode events data",
     "status": "in_progress"
   },
   {
-    "content": "Phase 3: Bug fixes and hardening",
+    "content": "Convert forms to Netlify Forms (contact, newsletter, event registration)",
+    "status": "pending"
+  },
+  {
+    "content": "Add Netlify deployment config (_redirects, netlify.toml)",
+    "status": "pending"
+  },
+  {
+    "content": "Production polish: SEO meta tags, optimized build",
+    "status": "pending"
+  },
+  {
+    "content": "Test static frontend-only version",
+    "status": "pending"
+  },
+  {
+    "content": "Verify build works for Netlify deployment",
     "status": "pending"
   }
 ]
