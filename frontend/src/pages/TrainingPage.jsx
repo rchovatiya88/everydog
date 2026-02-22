@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { PHOTOS } from "@/data/events";
 import {
   CheckCircle2,
   AlertTriangle,
@@ -82,8 +83,8 @@ export default function TrainingPage() {
             >
               <div className="rounded-[20px] overflow-hidden shadow-lg border border-border">
                 <img
-                  src="https://images.unsplash.com/photo-1763989979792-67611852276b?crop=entropy&cs=srgb&fm=jpg&w=700&q=80"
-                  alt="Dog training with disc"
+                  src={PHOTOS.funkey}
+                  alt="Dog training with disc at EveryDog League"
                   className="w-full h-[300px] sm:h-[380px] object-cover"
                 />
               </div>

@@ -3,6 +3,7 @@ import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { PHOTOS } from "@/data/events";
 import {
   Heart,
   Users,
@@ -71,8 +72,8 @@ export default function AboutPage() {
             >
               <div className="rounded-[20px] overflow-hidden shadow-lg border border-border">
                 <img
-                  src="https://images.unsplash.com/photo-1550284619-8a7419ab3a79?crop=entropy&cs=srgb&fm=jpg&w=700&q=80"
-                  alt="Dog at sunset in park"
+                  src={PHOTOS.howlidays}
+                  alt="EveryDog League Howdy Howlidays event"
                   className="w-full h-[300px] sm:h-[380px] object-cover"
                 />
               </div>

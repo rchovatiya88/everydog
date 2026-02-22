@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { EVENTS, GALLERY_IMAGES } from "@/data/events";
+import { EVENTS, GALLERY_IMAGES, PHOTOS } from "@/data/events";
 import { submitToGoogleSheets } from "@/lib/googleSheets";
 import {
   Dog,
@@ -128,7 +128,7 @@ export default function HomePage() {
               className="relative"
             >
               <div className="rounded-[20px] overflow-hidden shadow-lg border border-border">
-                <img src="https://images.unsplash.com/photo-1763989979285-d86a24b5ff06?crop=entropy&cs=srgb&fm=jpg&w=800&q=80" alt="Dog catching disc mid-air" className="w-full h-[320px] sm:h-[400px] object-cover" />
+                <img src={PHOTOS.hero} alt="Dog catching disc mid-air at EveryDog League" className="w-full h-[320px] sm:h-[400px] object-cover" />
               </div>
               <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-md border border-border p-3 flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-[#EAF7EF] flex items-center justify-center">
@@ -226,7 +226,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               <motion.div variants={fadeUp}>
                 <div className="rounded-[20px] overflow-hidden shadow-md border border-border">
-                  <img src="https://images.unsplash.com/photo-1763989979792-67611852276b?crop=entropy&cs=srgb&fm=jpg&w=700&q=80" alt="Dog training outdoors" className="w-full h-[280px] sm:h-[340px] object-cover" />
+                  <img src={PHOTOS.smallDog} alt="Small dog training with disc at EveryDog League" className="w-full h-[280px] sm:h-[340px] object-cover" />
                 </div>
               </motion.div>
               <motion.div variants={fadeUp}>
