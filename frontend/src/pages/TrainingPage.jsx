@@ -83,8 +83,8 @@ export default function TrainingPage() {
             >
               <div className="rounded-[20px] overflow-hidden shadow-lg border border-border">
                 <img
-                  src={PHOTOS.funkey}
-                  alt="Dog training with disc at EveryDog League"
+                  src={PHOTOS.stPattys}
+                  alt="Handler and dog at EveryDog League St. Patty's Day event"
                   className="w-full h-[300px] sm:h-[380px] object-cover"
                 />
               </div>

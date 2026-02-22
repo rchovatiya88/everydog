@@ -72,8 +72,8 @@ export default function AboutPage() {
             >
               <div className="rounded-[20px] overflow-hidden shadow-lg border border-border">
                 <img
-                  src={PHOTOS.howlidays}
-                  alt="EveryDog League Howdy Howlidays event"
+                  src={PHOTOS.fallFest3}
+                  alt="EveryDog League Fall Festival action shot"
                   className="w-full h-[300px] sm:h-[380px] object-cover"
                 />
               </div>
