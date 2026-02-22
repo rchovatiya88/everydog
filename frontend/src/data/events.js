@@ -1,5 +1,16 @@
 // All event data for EveryDog League - static data (no backend needed)
 
+// Original EveryDog League photos
+const PHOTOS = {
+  hero: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/4wa9xf3w_20251004UpDogFallFestival%2CSaturday-Greedy-2274%20copy.jpeg",
+  smallDog: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/qt0z8s1g_20240830UpDogTrilpeCrown%2CFunkey-00976%20copy.jpeg",
+  frizgility: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/f05r8zs3_20230408UpDogAlaCarte-Frizgility--93%20copy.jpeg",
+  howlidays: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/nnmv5tr8_20231202UpDogHowdyHowlidays%2CFunkey-10935%20copy.jpeg",
+  funkey: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/cygwef1p_20240504UpDog%2CFunKey-03786%20copy%202.jpeg",
+};
+
+export { PHOTOS };
+
 export const EVENTS = [
   {
     id: "evt-001",
@@ -8,7 +19,7 @@ export const EVENTS = [
     time: "9:00 AM - 11:00 AM",
     location: "Flag Pole Hill Park, Dallas",
     description:
-      "Perfect for first-timers! Learn the basics of disc dog in a fun, supportive environment. We'll cover safe throwing techniques, how to get your dog interested in the disc, and basic catches. All breeds and sizes welcome — from Chihuahuas to Great Danes!",
+      "Perfect for first-timers! Learn the basics of disc dog in a fun, supportive environment. We'll cover safe throwing techniques, how to get your dog interested in the disc, and basic catches. All breeds and sizes welcome \u2014 from Chihuahuas to Great Danes!",
     skill_level: "Beginner",
     capacity: 30,
     registered_count: 12,
@@ -19,8 +30,7 @@ export const EVENTS = [
       "Leash",
       "Shade tent (optional)",
     ],
-    image_url:
-      "https://images.unsplash.com/photo-1763989979148-c3d0c0c7edb6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwxfHxkb2clMjBjYXRjaGluZyUyMGZyaXNiZWUlMjBkaXNjJTIwb3V0ZG9vciUyMHBhcmt8ZW58MHx8fHwxNzcxNDQyNjk5fDA&ixlib=rb-4.1.0&q=85",
+    image_url: PHOTOS.frizgility,
   },
   {
     id: "evt-002",
@@ -29,7 +39,7 @@ export const EVENTS = [
     time: "8:00 AM - 10:30 AM",
     location: "White Rock Lake Park, Dallas",
     description:
-      "An open freestyle session for all skill levels. Show off your tricks, learn from experienced throwers, and enjoy the community vibes. Music, good energy, and flying discs — what more could you want?",
+      "An open freestyle session for all skill levels. Show off your tricks, learn from experienced throwers, and enjoy the community vibes. Music, good energy, and flying discs \u2014 what more could you want?",
     skill_level: "Open",
     capacity: 40,
     registered_count: 25,
@@ -39,8 +49,7 @@ export const EVENTS = [
       "Camera for action shots",
       "Good vibes",
     ],
-    image_url:
-      "https://images.unsplash.com/photo-1763989979285-d86a24b5ff06?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHw0fHxkb2clMjBjYXRjaGluZyUyMGZyaXNiZWUlMjBkaXNjJTIwb3V0ZG9vciUyMHBhcmt8ZW58MHx8fHwxNzcxNDQyNjk5fDA&ixlib=rb-4.1.0&q=85",
+    image_url: PHOTOS.hero,
   },
   {
     id: "evt-003",
@@ -59,8 +68,7 @@ export const EVENTS = [
       "Treats",
       "Your awesome small dog",
     ],
-    image_url:
-      "https://images.unsplash.com/photo-1761959939998-aae193908c11?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NDh8MHwxfHNlYXJjaHwxfHxoYXBweSUyMGRvZ3MlMjBwbGF5aW5nJTIwb3V0ZG9vciUyMGRpdmVyc2UlMjBicmVlZHN8ZW58MHx8fHwxNzcxNDQyNzAxfDA&ixlib=rb-4.1.0&q=85",
+    image_url: PHOTOS.smallDog,
   },
   {
     id: "evt-004",
@@ -79,8 +87,7 @@ export const EVENTS = [
       "High-value treats",
       "Athletic shoes",
     ],
-    image_url:
-      "https://images.pexels.com/photos/13042608/pexels-photo-13042608.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    image_url: PHOTOS.funkey,
   },
   {
     id: "evt-005",
@@ -99,8 +106,7 @@ export const EVENTS = [
       "Water and shade",
       "Your rescue's favorite toy",
     ],
-    image_url:
-      "https://images.unsplash.com/photo-1597595735637-05a49627ee29?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NDh8MHwxfHNlYXJjaHwyfHxoYXBweSUyMGRvZ3MlMjBwbGF5aW5nJTIwb3V0ZG9vciUyMGRpdmVyc2UlMjBicmVlZHN8ZW58MHx8fHwxNzcxNDQyNzAxfDA&ixlib=rb-4.1.0&q=85",
+    image_url: PHOTOS.howlidays,
   },
   {
     id: "evt-006",
@@ -119,8 +125,7 @@ export const EVENTS = [
       "First aid kit",
       "Music for freestyle routine",
     ],
-    image_url:
-      "https://images.pexels.com/photos/6527910/pexels-photo-6527910.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    image_url: PHOTOS.hero,
   },
   {
     id: "evt-007",
@@ -140,8 +145,7 @@ export const EVENTS = [
       "Discs (we have extras)",
       "Good appetite for food trucks",
     ],
-    image_url:
-      "https://images.unsplash.com/photo-1758543535665-ca0c1c64d9d1?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NDh8MHwxfHNlYXJjaHw0fHxoYXBweSUyMGRvZ3MlMjBwbGF5aW5nJTIwb3V0ZG9vciUyMGRpdmVyc2UlMjBicmVlZHN8ZW58MHx8fHwxNzcxNDQyNzAxfDA&ixlib=rb-4.1.0&q=85",
+    image_url: PHOTOS.frizgility,
   },
 ];
 
@@ -163,28 +167,10 @@ export function getFilteredEvents(skillLevel = "All", sort = "soonest") {
 }
 
 export const GALLERY_IMAGES = [
-  {
-    url: "https://images.unsplash.com/photo-1763989979148-c3d0c0c7edb6?crop=entropy&cs=srgb&fm=jpg&w=600&q=80",
-    alt: "Dog catching frisbee",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1758543535665-ca0c1c64d9d1?crop=entropy&cs=srgb&fm=jpg&w=600&q=80",
-    alt: "Dogs playing together",
-  },
-  {
-    url: "https://images.pexels.com/photos/13042608/pexels-photo-13042608.jpeg?auto=compress&cs=tinysrgb&w=600",
-    alt: "Dog leaping for frisbee",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1769117112604-db33d03051c0?crop=entropy&cs=srgb&fm=jpg&w=600&q=80",
-    alt: "Dogs on green grass",
-  },
-  {
-    url: "https://images.pexels.com/photos/998254/pexels-photo-998254.jpeg?auto=compress&cs=tinysrgb&w=600",
-    alt: "Dogs on beach",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1597595735637-05a49627ee29?crop=entropy&cs=srgb&fm=jpg&w=600&q=80",
-    alt: "Dogs playing outdoors",
-  },
+  { url: PHOTOS.hero, alt: "Border Collie catching disc mid-air at Fall Festival" },
+  { url: PHOTOS.smallDog, alt: "Small dog running with frisbee at Triple Crown" },
+  { url: PHOTOS.frizgility, alt: "Dog and handler in frizgility competition" },
+  { url: PHOTOS.howlidays, alt: "Disc dog action at Howdy Howlidays event" },
+  { url: PHOTOS.funkey, alt: "Athletic disc catch at UpDog competition" },
+  { url: PHOTOS.hero, alt: "High-flying disc dog catch" },
 ];
