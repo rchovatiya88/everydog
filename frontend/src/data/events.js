@@ -2,11 +2,18 @@
 
 // Original EveryDog League photos
 const PHOTOS = {
+  // Batch 1
   hero: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/4wa9xf3w_20251004UpDogFallFestival%2CSaturday-Greedy-2274%20copy.jpeg",
   smallDog: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/qt0z8s1g_20240830UpDogTrilpeCrown%2CFunkey-00976%20copy.jpeg",
   frizgility: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/f05r8zs3_20230408UpDogAlaCarte-Frizgility--93%20copy.jpeg",
   howlidays: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/nnmv5tr8_20231202UpDogHowdyHowlidays%2CFunkey-10935%20copy.jpeg",
   funkey: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/cygwef1p_20240504UpDog%2CFunKey-03786%20copy%202.jpeg",
+  // Batch 2
+  skyhoundz: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/i00n1086_20250815SkyHoundz%2CD%26ARound1-0121%20copy.jpeg",
+  fallFest2: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/9dhxf8xh_20251004UpDogFallFestival%2CSaturday-Greedy-4034%20copy.jpeg",
+  rockNRollers: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/dt28eiu0_20240113UpDogRock-N-Rollers%2CFrizgilityL2-07116%20copy.jpeg",
+  stPattys: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/8t22jcby_20240317UpDog%2CStPattysDay-7Up%2CSarah%26Cheeters--45%20copy.jpeg",
+  fallFest3: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/5eujte4j_20251004UpDogFallFestival%2CSaturday-Greedy-4051%20copy.jpeg",
 };
 
 export { PHOTOS };
@@ -49,7 +56,7 @@ export const EVENTS = [
       "Camera for action shots",
       "Good vibes",
     ],
-    image_url: PHOTOS.hero,
+    image_url: PHOTOS.fallFest2,
   },
   {
     id: "evt-003",
@@ -87,7 +94,7 @@ export const EVENTS = [
       "High-value treats",
       "Athletic shoes",
     ],
-    image_url: PHOTOS.funkey,
+    image_url: PHOTOS.rockNRollers,
   },
   {
     id: "evt-005",
@@ -106,7 +113,7 @@ export const EVENTS = [
       "Water and shade",
       "Your rescue's favorite toy",
     ],
-    image_url: PHOTOS.howlidays,
+    image_url: PHOTOS.stPattys,
   },
   {
     id: "evt-006",
@@ -125,7 +132,7 @@ export const EVENTS = [
       "First aid kit",
       "Music for freestyle routine",
     ],
-    image_url: PHOTOS.hero,
+    image_url: PHOTOS.skyhoundz,
   },
   {
     id: "evt-007",
@@ -145,7 +152,7 @@ export const EVENTS = [
       "Discs (we have extras)",
       "Good appetite for food trucks",
     ],
-    image_url: PHOTOS.frizgility,
+    image_url: PHOTOS.funkey,
   },
 ];
 
@@ -169,8 +176,11 @@ export function getFilteredEvents(skillLevel = "All", sort = "soonest") {
 export const GALLERY_IMAGES = [
   { url: PHOTOS.hero, alt: "Border Collie catching disc mid-air at Fall Festival" },
   { url: PHOTOS.smallDog, alt: "Small dog running with frisbee at Triple Crown" },
+  { url: PHOTOS.skyhoundz, alt: "Disc dog action at SkyHoundz competition" },
+  { url: PHOTOS.stPattys, alt: "Handler and dog at St. Patty's Day event" },
+  { url: PHOTOS.rockNRollers, alt: "Frizgility run at Rock-N-Rollers event" },
+  { url: PHOTOS.fallFest3, alt: "Flying catch at UpDog Fall Festival" },
   { url: PHOTOS.frizgility, alt: "Dog and handler in frizgility competition" },
-  { url: PHOTOS.howlidays, alt: "Disc dog action at Howdy Howlidays event" },
-  { url: PHOTOS.funkey, alt: "Athletic disc catch at UpDog competition" },
-  { url: PHOTOS.hero, alt: "High-flying disc dog catch" },
+  { url: PHOTOS.howlidays, alt: "Disc dog action at Howdy Howlidays" },
+  { url: PHOTOS.fallFest2, alt: "High-energy disc catch at Fall Festival" },
 ];
