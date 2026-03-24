@@ -91,6 +91,32 @@
     padding-bottom: 3.5rem;
 }
 
+.deferred-section {
+    display: block; /* removed content-visibility: auto to prevent scroll loading */
+}
+
+.section-skeleton {
+    min-height: 12rem;
+    border-radius: 1.25rem;
+    background: linear-gradient(
+        90deg,
+        rgba(203, 223, 235, 0.35),
+        rgba(255, 255, 255, 0.75),
+        rgba(203, 223, 235, 0.35)
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
 @media (min-width: 640px) {
     .section-spacing {
         padding-top: 4.5rem;
