@@ -1,21 +1,20 @@
 import { getRegistrationsForEvent } from "../lib/registrations";
+import { getGoogleDriveImageUrl } from "../lib/googleDrive";
 
 // All event data for EveryDog League - static data (no backend needed)
 
-// Original EveryDog League photos
+// Homepage/gallery images now resolve from Google Drive file IDs in src/config.js.
 const PHOTOS = {
-  // Batch 1
-  hero: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/4wa9xf3w_20251004UpDogFallFestival%2CSaturday-Greedy-2274%20copy.jpeg",
-  smallDog: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/qt0z8s1g_20240830UpDogTrilpeCrown%2CFunkey-00976%20copy.jpeg",
-  frizgility: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/f05r8zs3_20230408UpDogAlaCarte-Frizgility--93%20copy.jpeg",
-  howlidays: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/nnmv5tr8_20231202UpDogHowdyHowlidays%2CFunkey-10935%20copy.jpeg",
-  funkey: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/cygwef1p_20240504UpDog%2CFunKey-03786%20copy%202.jpeg",
-  // Batch 2
-  skyhoundz: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/i00n1086_20250815SkyHoundz%2CD%26ARound1-0121%20copy.jpeg",
-  fallFest2: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/9dhxf8xh_20251004UpDogFallFestival%2CSaturday-Greedy-4034%20copy.jpeg",
-  rockNRollers: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/dt28eiu0_20240113UpDogRock-N-Rollers%2CFrizgilityL2-07116%20copy.jpeg",
-  stPattys: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/8t22jcby_20240317UpDog%2CStPattysDay-7Up%2CSarah%26Cheeters--45%20copy.jpeg",
-  fallFest3: "https://customer-assets.emergentagent.com/job_everydog-fly/artifacts/5eujte4j_20251004UpDogFallFestival%2CSaturday-Greedy-4051%20copy.jpeg",
+  hero: getGoogleDriveImageUrl("hero", "Hero"),
+  smallDog: getGoogleDriveImageUrl("smallDog", "Small Dog Training"),
+  frizgility: getGoogleDriveImageUrl("frizgility", "Frizgility"),
+  howlidays: getGoogleDriveImageUrl("howlidays", "Howdy Howlidays"),
+  funkey: getGoogleDriveImageUrl("funkey", "FunKey"),
+  skyhoundz: getGoogleDriveImageUrl("skyhoundz", "SkyHoundz"),
+  fallFest2: getGoogleDriveImageUrl("fallFest2", "Fall Festival 2"),
+  rockNRollers: getGoogleDriveImageUrl("rockNRollers", "Rock-N-Rollers"),
+  stPattys: getGoogleDriveImageUrl("stPattys", "St. Patty's Day"),
+  fallFest3: getGoogleDriveImageUrl("fallFest3", "Fall Festival 3"),
 };
 
 export { PHOTOS };
