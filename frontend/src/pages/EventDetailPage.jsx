@@ -64,12 +64,25 @@ export default function EventDetailPage() {
     );
   }
 
-  const spotsRemaining = event.capacity - event.registered_count;
-  const capacityPercent = (event.registered_count / event.capacity) * 100;
+  const spotsRemaining = Math.max(0, event.capacity - event.registered_count);
+  const isSoldOut = spotsRemaining === 0;
+  const capacityPercent = Math.min(100, (event.registered_count / event.capacity) * 100);
   const gamesList = event.games ? event.games.split(",").map(g => g.trim()).filter(Boolean) : [];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const latestEvent = getEventById(eventId);
+
+    if (!latestEvent) {
+      toast.error("This event is no longer available.");
+      return;
+    }
+
+    if (latestEvent.registered_count >= latestEvent.capacity) {
+      toast.error("This event is full.");
+      return;
+    }
+
     if (!form.name || !form.email || !form.dog_name || !form.dog_breed || !form.dog_size || !form.experience_level) {
       toast.error("Please fill in all fields.");
       return;
@@ -94,7 +107,11 @@ export default function EventDetailPage() {
       };
       
       // Save locally for the Admin Dashboard
-      saveRegistration(registrationData);
+      const saved = saveRegistration(registrationData);
+      if (!saved) {
+        toast.error("Could not save your registration. Please try again.");
+        return;
+      }
       
       // Also send to Google Sheets
       const result = await submitToGoogleSheets("registration", registrationData);
@@ -193,14 +210,23 @@ export default function EventDetailPage() {
             <div className="lg:sticky lg:top-24">
               <Card className="rounded-[20px] border-border shadow-md" data-testid="event-detail-register-form">
                 <CardHeader className="pb-4">
-                  <CardTitle className="font-display text-lg">{registered ? "You&apos;re Registered!" : "Register for This Event"}</CardTitle>
+                  <CardTitle className="font-display text-lg">{registered ? "You're Registered!" : "Register for This Event"}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {registered ? (
                     <div className="text-center py-6">
                       <div className="w-16 h-16 rounded-full bg-[#EAF7EF] flex items-center justify-center mx-auto mb-4"><CheckCircle2 className="w-8 h-8 text-[#1F7A4A]" /></div>
                       <h3 className="text-lg font-semibold mb-2">See You There!</h3>
-                      <p className="text-sm text-muted-foreground mb-4">You&apos;re all set for {event.title}. We&apos;ll be in touch with event details.</p>
+                      <p className="text-sm text-muted-foreground mb-4">You're all set for {event.title}. We'll be in touch with event details.</p>
+                      <Link to="/events"><Button variant="outline" className="rounded-[12px]">Browse More Events</Button></Link>
+                    </div>
+                  ) : isSoldOut ? (
+                    <div className="text-center py-6">
+                      <div className="w-16 h-16 rounded-full bg-[#FFF8F0] flex items-center justify-center mx-auto mb-4">
+                        <AlertCircle className="w-8 h-8 text-[#CC6E22]" />
+                      </div>
+                      <h3 className="text-lg font-semibold mb-2">Event Full</h3>
+                      <p className="text-sm text-muted-foreground mb-4">All {event.capacity} spots have been taken for this event.</p>
                       <Link to="/events"><Button variant="outline" className="rounded-[12px]">Browse More Events</Button></Link>
                     </div>
                   ) : (
@@ -283,7 +309,7 @@ export default function EventDetailPage() {
                           I agree to the safety waiver. I understand that disc dog activities involve physical activity and I take responsibility for my dog&apos;s safety and behavior.
                         </Label>
                       </div>
-                      <Button type="submit" disabled={submitting} className="w-full rounded-[12px] bg-[#0B74B5] text-white h-12 text-base hover:bg-[#095d91] shadow-sm" data-testid="event-register-submit-button">
+                      <Button type="submit" disabled={submitting || isSoldOut} className="w-full rounded-[12px] bg-[#0B74B5] text-white h-12 text-base hover:bg-[#095d91] shadow-sm disabled:cursor-not-allowed disabled:opacity-60" data-testid="event-register-submit-button">
                         {submitting ? "Registering..." : "Register Now"}
                       </Button>
                       <p className="text-xs text-center text-muted-foreground">{spotsRemaining} spots remaining. Free event.</p>

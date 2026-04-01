@@ -50,7 +50,11 @@ export default function AdminDashboard() {
   useEffect(() => {
     loadEvents();
     window.addEventListener("local-events-updated", loadEvents);
-    return () => window.removeEventListener("local-events-updated", loadEvents);
+    window.addEventListener("local-registrations-updated", loadEvents);
+    return () => {
+      window.removeEventListener("local-events-updated", loadEvents);
+      window.removeEventListener("local-registrations-updated", loadEvents);
+    };
   }, []);
 
   const handleViewRegistrations = (event) => {
@@ -357,7 +361,7 @@ export default function AdminDashboard() {
                             <div className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" /> {event.location}</div>
                             <div className="flex items-center gap-1.5 text-foreground font-medium">
                               <Users className="w-3.5 h-3.5 text-[#CC6E22]" /> 
-                              {regs.length + event.registered_count} / {event.capacity} Registered
+                              {event.registered_count} / {event.capacity} Registered
                             </div>
                           </div>
                         </div>
@@ -427,19 +431,14 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <p className="text-2xl font-semibold">{registrations.length}</p>
-                    <p className="text-sm text-muted-foreground">Total Local Registrations</p>
-                  </div>
-                  <Separator orientation="vertical" className="h-10 mx-2" />
-                  <div>
-                    <p className="text-2xl font-semibold">{selectedEvent.registered_count}</p>
-                    <p className="text-sm text-muted-foreground">Legacy Registrations</p>
+                    <p className="text-sm text-muted-foreground">Total Registrations</p>
                   </div>
                 </div>
 
                 {registrations.length === 0 ? (
                   <div className="text-center py-12 border-2 border-dashed border-border rounded-xl">
                     <Users className="w-10 h-10 text-muted-foreground mx-auto mb-3 opacity-50" />
-                    <p className="text-muted-foreground">No local registrations yet.</p>
+                    <p className="text-muted-foreground">No registrations yet.</p>
                   </div>
                 ) : (
                   <div className="overflow-x-auto">

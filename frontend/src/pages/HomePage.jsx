@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import GoogleDriveImage from "@/components/GoogleDriveImage";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { EVENTS, GALLERY_IMAGES, PHOTOS } from "@/data/events";
+import { EVENTS, GALLERY_IMAGES, LANDING_PAGE_IMAGES } from "@/data/events";
 import { submitToGoogleSheets } from "@/lib/googleSheets";
 import {
   Dog,
@@ -111,8 +112,8 @@ export default function HomePage() {
 
             <div className="relative">
               <div className="rounded-[20px] overflow-hidden shadow-lg border border-border">
-                <img
-                  src={PHOTOS.hero}
+                <GoogleDriveImage
+                  imageKey={LANDING_PAGE_IMAGES.hero}
                   alt="Dog catching disc mid-air at EveryDog League"
                   className="w-full h-[320px] sm:h-[400px] object-cover"
                   style={{ transform: "translateZ(0)", backfaceVisibility: "hidden", willChange: "transform" }}
@@ -208,8 +209,8 @@ export default function HomePage() {
         <div className="container-main">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="rounded-[20px] overflow-hidden shadow-md border border-border">
-              <img
-                src={PHOTOS.smallDog}
+              <GoogleDriveImage
+                imageKey={LANDING_PAGE_IMAGES.smallDog}
                 alt="Small dog training with disc at EveryDog League"
                 className="w-full h-[280px] sm:h-[340px] object-cover"
                 style={{ transform: "translateZ(0)", backfaceVisibility: "hidden", willChange: "transform" }}
@@ -242,8 +243,8 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
             {GALLERY_IMAGES.map((img, i) => (
               <div key={`${img.alt}-${i}`} className="gallery-item rounded-[18px] overflow-hidden border border-border shadow-sm">
-                <img
-                  src={img.url}
+                <GoogleDriveImage
+                  imageKey={img.key}
                   alt={img.alt}
                   className="w-full h-40 sm:h-52 md:h-56 object-cover"
                   style={{ transform: "translateZ(0)", backfaceVisibility: "hidden", willChange: "transform" }}

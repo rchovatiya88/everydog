@@ -6,6 +6,11 @@
 
 var SHEET_ID = '1sBaotDowQ9b331tvL9d8RoMlz_K-MB-Qur-L957l_aQ';
 
+function jsonResponse(payload) {
+  return ContentService.createTextOutput(JSON.stringify(payload))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
 // ---- SETUP: Run this once to create sheet tabs + headers ----
 function setupSheets() {
   var ss = SpreadsheetApp.openById(SHEET_ID);
@@ -67,8 +72,7 @@ function doPost(e) {
           if (emails[i][0] === data.email && eventIds[i][0] === data.event_id) {
             result.success = false;
             result.message = "You're already registered for this event!";
-            return ContentService.createTextOutput(JSON.stringify(result))
-              .setMimeType(ContentService.MimeType.JSON);
+            return jsonResponse(result);
           }
         }
         regSheet.appendRow([
@@ -95,8 +99,7 @@ function doPost(e) {
           if (existingEmails[j][0] === data.email) {
             result.success = false;
             result.message = "You're already subscribed!";
-            return ContentService.createTextOutput(JSON.stringify(result))
-              .setMimeType(ContentService.MimeType.JSON);
+            return jsonResponse(result);
           }
         }
         newsSheet.appendRow([timestamp, data.email || '']);
@@ -120,20 +123,52 @@ function doPost(e) {
         result.message = 'Unknown form type: ' + data.type;
     }
     
-    return ContentService.createTextOutput(JSON.stringify(result))
-      .setMimeType(ContentService.MimeType.JSON);
+    return jsonResponse(result);
       
   } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({
+    return jsonResponse({
       success: false,
       message: 'Server error: ' + err.toString()
-    })).setMimeType(ContentService.MimeType.JSON);
+    });
   }
 }
 
 function doGet(e) {
-  return ContentService.createTextOutput(JSON.stringify({
-    status: 'ok',
-    message: 'EveryDog League API is running'
-  })).setMimeType(ContentService.MimeType.JSON);
+  try {
+    var params = e && e.parameter ? e.parameter : {};
+
+    if (params.asset === 'image') {
+      var fileId = params.id;
+      var key = params.key || 'image';
+
+      if (!fileId) {
+        return jsonResponse({
+          success: false,
+          message: 'Missing Google Drive file ID for ' + key
+        });
+      }
+
+      var file = DriveApp.getFileById(fileId);
+      var blob = file.getBlob();
+      var mimeType = blob.getContentType() || 'image/jpeg';
+      var base64 = Utilities.base64Encode(blob.getBytes());
+
+      return jsonResponse({
+        success: true,
+        key: key,
+        mime_type: mimeType,
+        data_url: 'data:' + mimeType + ';base64,' + base64
+      });
+    }
+
+    return jsonResponse({
+      status: 'ok',
+      message: 'EveryDog League API is running'
+    });
+  } catch (err) {
+    return jsonResponse({
+      success: false,
+      message: 'Server error: ' + err.toString()
+    });
+  }
 }

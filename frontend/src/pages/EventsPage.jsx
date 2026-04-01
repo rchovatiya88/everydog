@@ -95,7 +95,10 @@ export default function EventsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {events.map((event) => (
+            {events.map((event) => {
+              const spotsRemaining = Math.max(0, event.capacity - event.registered_count);
+
+              return (
               <Link key={event.id} to={`/events/${event.id}`}>
                 <Card className="rounded-[20px] border-border overflow-hidden event-card-hover cursor-pointer h-full">
                   <div className="relative">
@@ -126,19 +129,19 @@ export default function EventsPage() {
                       <div className="flex items-center gap-2">
                         <Users className="w-3.5 h-3.5 flex-shrink-0" />
                         <span className="font-display font-medium text-foreground">
-                          {event.capacity - event.registered_count} of {event.capacity} spots left
+                          {spotsRemaining} of {event.capacity} spots left
                         </span>
                       </div>
                     </div>
                     <div className="mt-4">
-                      <span className="inline-flex items-center justify-center w-full rounded-[12px] bg-[#0B74B5] text-white h-10 text-sm font-medium">
-                        Register <ArrowRight className="w-4 h-4 ml-2" />
+                      <span className={`inline-flex items-center justify-center w-full rounded-[12px] h-10 text-sm font-medium ${spotsRemaining === 0 ? "bg-muted text-muted-foreground" : "bg-[#0B74B5] text-white"}`}>
+                        {spotsRemaining === 0 ? "Event Full" : <>Register <ArrowRight className="w-4 h-4 ml-2" /></>}
                       </span>
                     </div>
                   </CardContent>
                 </Card>
               </Link>
-            ))}
+            )})}
           </div>
         )}
       </div>
